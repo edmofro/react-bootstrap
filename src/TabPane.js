@@ -89,6 +89,12 @@ let TabPane = React.createClass({
     $bs_tabcontainer: PropTypes.oneOf([null])
   },
 
+  getInitialState() {
+    return ({
+      hasBeenActive: this.isActive(),
+    });
+  },
+
   componentWillMount() {
     this.exited = !this.isActive();
     this.registerWithParent();
@@ -178,7 +184,7 @@ let TabPane = React.createClass({
         aria-labelledby={labelledBy}
         className={classNames(this.props.className, classes, { in: !Transition })}
       >
-        { this.props.children }
+        { this.state.hasBeenActive ? this.props.children : null }
       </div>
     );
 
@@ -215,6 +221,9 @@ let TabPane = React.createClass({
     if (this.isActive()) {
       addClass(node, 'active');
       node.offsetWidth; // eslint-disable-line no-unused-expressions
+      this.setState({
+        hasBeenActive: true,
+      });
     }
   },
 
